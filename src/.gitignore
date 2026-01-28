@@ -1,0 +1,7 @@
+# Ignore all compiled files
+.class
+.exe
+__pycache__/
+
+# Except this file
+!.gitignore
