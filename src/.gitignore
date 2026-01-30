@@ -2,6 +2,8 @@
 .class
 .exe
 __pycache__/
+build/
+lib/
 
 # Except this file
 !.gitignore

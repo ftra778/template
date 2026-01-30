@@ -1,0 +1,55 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+        - uses: actions/checkout@v4
+
+        - name: Set up JDK 11
+          uses: actions/setup-java@v4
+          with:
+            java-version: '11'
+            distribution: 'temurin'
+
+        - name: Download JUnit & Checkstyle
+          run: |
+            mkdir -p lib
+            curl -L -o lib/junit.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
+            curl -L -o lib/hamcrest.jar https://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
+            curl -L -o lib/checkstyle.jar https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.21.0/checkstyle-10.21.0-all.jar
+            curl -L -o checkstyle.xml https://raw.githubusercontent.com/checkstyle/checkstyle/checkstyle-10.21.0/src/main/resources/google_checks.xml
+
+        - name: Compile Code
+          run: |
+            mkdir -p build/classes
+            # Compile Main and Test together. 
+            # Note the updated paths: src/main/java/... and src/test/java/...
+            javac -d build/classes \
+                  -cp "lib/*" \
+                  src/main/java/com/example/*.java \
+                  src/tests/java/com/example/*.java
+
+        - name: Run Checkstyle Linter
+          run: |
+            echo "Running Checkstyle on Source Code..."
+            # Only lint production code (src/main), not tests
+            java -jar lib/checkstyle.jar -c checkstyle.xml src/main/java/com/example/*.java
+          continue-on-error: false
+
+        - name: Run JUnit Tests
+          run: |
+            echo "Running Tests..."
+            # Classpath includes build output + junit jars.
+            # We run the fully qualified class name: com.example.MainTest
+            java -cp "build/classes:lib/*" org.junit.runner.JUnitCore com.example.MainTest

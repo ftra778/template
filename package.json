@@ -1,0 +1,11 @@
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "node src/tests/main_test.js",
+    "lint": "eslint src/*.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  }
+}
