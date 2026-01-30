@@ -36,7 +36,7 @@ Download the SDK from the [Aldebaran](https://aldebaran.com/en/support/kb/nao6/d
 ## Executing Python program
 Install the dependencies using the command
 ```
-pip install -r py_requirements.txt
+pip install -r requirements.txt
 ```
 
 Run the Python program using the command
@@ -124,6 +124,8 @@ template/
 [Finn Tracey](finn.tracey@auckland.ac.nz)
 
 ## Version History
+* 1.1.1
+    * Fixed Python requirements.txt bug
 * 1.1
     * Added test cases and restructured file system
 * 1.0
