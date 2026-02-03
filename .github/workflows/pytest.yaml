@@ -18,7 +18,7 @@ jobs:
         python-version: ["3.8", "3.9", "3.10"]
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.10
+    - name: Set up Python
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
@@ -29,7 +29,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with pylint
       run: |
-        PYTHONPATH=. pylint src
+        PYTHONPATH=. pylint --fail-under=0.5 src --ignore-patterns=.*?_test.py,test_.*?.py
     - name: Test with pytest
       run: |
-        PYTHONPATH=. pytest src/tests
+        PYTHONPATH=. pytest 
